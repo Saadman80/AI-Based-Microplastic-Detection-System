@@ -3,65 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlastiScope — Microplastic Detection Instrument</title>
-<meta name="description" content="AI-powered microplastic detection in microscopy images. Detects fibers, films, fragments and pellets with a custom-trained YOLO26 model.">
+<title>PlastiScope — Microplastic Detection</title>
+<meta name="description" content="Detect and classify microplastics — fiber, film, fragment, pellet — in microscopy imagery with a custom-trained YOLO26 model.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Instrument+Sans:wght@400..700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%231846C7' stroke-width='3'/><circle cx='16' cy='16' r='4' fill='%231846C7'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%233B5C86' stroke-width='2.5'/><circle cx='16' cy='16' r='6.5' fill='none' stroke='%23A17E5D' stroke-width='1.5'/><circle cx='16' cy='16' r='2' fill='%233B5C86'/></svg>">
 </head>
 <body>
 
+<!-- ══ Header ══ -->
 <header class="topbar">
-  <div class="brand">
-    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-      <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.5"/>
-      <circle cx="16" cy="16" r="4" fill="currentColor"/>
-      <line x1="16" y1="1" x2="16" y2="7" stroke="currentColor" stroke-width="2"/>
-      <line x1="16" y1="25" x2="16" y2="31" stroke="currentColor" stroke-width="2"/>
-    </svg>
-    <span class="brand-name">PlastiScope</span>
-    <span class="brand-sub">Microplastic Detection Instrument</span>
-  </div>
-  <div class="model-status" id="modelStatus">
-    <span class="led" id="statusLed" aria-hidden="true"></span>
-    <span class="mono" id="statusText">connecting…</span>
+  <a class="brand" href="/" aria-label="PlastiScope home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="40" height="40">
+        <defs>
+          <radialGradient id="lens" cx="38%" cy="34%" r="72%">
+            <stop offset="0%" stop-color="#3d4152"/>
+            <stop offset="60%" stop-color="#20222c"/>
+            <stop offset="100%" stop-color="#141520"/>
+          </radialGradient>
+        </defs>
+        <circle cx="20" cy="20" r="18.5" fill="none" stroke="#3B5C86" stroke-width="1.4"/>
+        <circle cx="20" cy="20" r="15" fill="url(#lens)"/>
+        <circle cx="20" cy="20" r="15" fill="none" stroke="#A17E5D" stroke-width="1" opacity=".65"/>
+        <!-- particles = the 4 detection channels -->
+        <circle cx="14.5" cy="15" r="2" fill="#E1A73E"/>
+        <circle cx="25" cy="14" r="1.6" fill="#4FA3D1"/>
+        <circle cx="24" cy="25.5" r="2.1" fill="#46B08A"/>
+        <circle cx="15" cy="25" r="1.5" fill="#A97CD1"/>
+        <circle cx="20" cy="20" r="1" fill="#EFECE6" opacity=".7"/>
+        <ellipse cx="15" cy="14" rx="5.5" ry="3.5" fill="#ffffff" opacity=".07"/>
+      </svg>
+    </span>
+    <span class="brand-text">
+      <span class="brand-name">PlastiScope</span>
+      <span class="brand-sub">Microplastic detection instrument</span>
+    </span>
+  </a>
+
+  <div class="topbar-right">
+    <span class="tagline">Fiber · Film · Fragment · Pellet</span>
+    <div class="model-status" id="modelStatus" title="Model status">
+      <span class="led" id="statusLed" aria-hidden="true"></span>
+      <span class="mono" id="statusText">connecting…</span>
+    </div>
   </div>
 </header>
 
-<main class="bench">
+<main class="workbench">
 
-  <!-- ══ Stage / viewport ══ -->
-  <section class="stage-panel" aria-label="Specimen viewport">
-    <div class="panel-head">
+  <!-- ══ Stage card ══ -->
+  <section class="card stage-card" aria-label="Specimen viewport">
+    <div class="card-head">
       <span class="eyebrow">Field of view</span>
-      <span class="mono stage-meta" id="stageMeta"></span>
+      <span class="mono muted" id="stageMeta">no specimen loaded</span>
     </div>
 
     <div class="stage" id="stage">
-      <!-- Empty state: the eyepiece -->
+      <!-- Empty state -->
       <div class="eyepiece-wrap" id="emptyState">
         <div class="eyepiece" id="dropzone" role="button" tabindex="0"
              aria-label="Upload a micrograph. Click to browse or drop an image file.">
-          <svg class="eyepiece-ring" viewBox="0 0 200 200" aria-hidden="true">
-            <circle cx="100" cy="100" r="96" class="ring-outer"/>
-            <circle cx="100" cy="100" r="78" class="ring-inner"/>
-            <g class="ticks"></g>
-            <line x1="100" y1="88" x2="100" y2="112" class="crosshair"/>
-            <line x1="88" y1="100" x2="112" y2="100" class="crosshair"/>
+          <div class="eyepiece-glow" aria-hidden="true"></div>
+          <svg class="eyepiece-svg" viewBox="0 0 240 240" aria-hidden="true">
+            <defs>
+              <radialGradient id="glass" cx="42%" cy="38%" r="70%">
+                <stop offset="0%" stop-color="#242734"/>
+                <stop offset="70%" stop-color="#191b25"/>
+                <stop offset="100%" stop-color="#111219"/>
+              </radialGradient>
+            </defs>
+            <circle cx="120" cy="120" r="112" class="ring-outer"/>
+            <circle cx="120" cy="120" r="94" fill="url(#glass)"/>
+            <circle cx="120" cy="120" r="94" class="ring-inner"/>
+            <g class="ticks" id="ticks"></g>
+            <ellipse cx="92" cy="86" rx="34" ry="20" class="glass-hi"/>
+            <line x1="120" y1="108" x2="120" y2="132" class="crosshair"/>
+            <line x1="108" y1="120" x2="132" y2="120" class="crosshair"/>
           </svg>
           <div class="eyepiece-copy">
-            <strong>Stage empty</strong>
-            <span>Drop a micrograph<br>or click to browse</span>
+            <strong>Load a micrograph</strong>
+            <span>Drop an image here, click to browse,<br>or paste from clipboard</span>
           </div>
         </div>
-        <p class="samples-label eyebrow">Or load a sample specimen</p>
-        <div class="samples" id="samples">
-          <button class="sample-chip" data-src="samples/brightfield_1.jpg">Brightfield · A</button>
-          <button class="sample-chip" data-src="samples/brightfield_2.jpg">Brightfield · B</button>
-          <button class="sample-chip" data-src="samples/fluorescence_1.jpg">Fluorescence · A</button>
-          <button class="sample-chip" data-src="samples/fluorescence_2.jpg">Fluorescence · B</button>
+
+        <div class="samples">
+          <span class="samples-label eyebrow">Sample specimens</span>
+          <div class="sample-row" id="samples">
+            <button class="sample-chip" data-src="samples/brightfield_1.jpg"><span class="dot dot-bf"></span>Brightfield A</button>
+            <button class="sample-chip" data-src="samples/brightfield_2.jpg"><span class="dot dot-bf"></span>Brightfield B</button>
+            <button class="sample-chip" data-src="samples/fluorescence_1.jpg"><span class="dot dot-fl"></span>Fluorescence A</button>
+            <button class="sample-chip" data-src="samples/fluorescence_2.jpg"><span class="dot dot-fl"></span>Fluorescence B</button>
+          </div>
         </div>
       </div>
 
@@ -72,11 +107,9 @@
       </div>
     </div>
 
-    <div class="stage-foot">
-      <span class="mono" id="readout">—</span>
-      <div class="stage-actions">
-        <button class="btn ghost" id="newSpecimen" hidden>New specimen</button>
-      </div>
+    <div class="card-foot">
+      <span class="mono readout" id="readout">Awaiting specimen</span>
+      <button class="btn ghost sm" id="newSpecimen" hidden>↺ New specimen</button>
     </div>
     <input type="file" id="fileInput" accept="image/*" hidden>
   </section>
@@ -84,8 +117,10 @@
   <!-- ══ Readout rail ══ -->
   <aside class="rail" aria-label="Detection readout">
 
-    <section class="rail-block">
-      <h2 class="eyebrow">Detection channels</h2>
+    <section class="card rail-block">
+      <div class="card-head">
+        <span class="eyebrow">Detection channels</span>
+      </div>
       <ul class="channels" id="channels">
         <li class="channel" data-class="fiber">
           <button class="ch-toggle" aria-pressed="true"><span class="swatch sw-fiber"></span><span class="ch-name">Fiber</span></button>
@@ -105,37 +140,38 @@
         </li>
       </ul>
       <div class="total-row">
-        <span>Total particles</span>
+        <span class="eyebrow">Total particles</span>
         <span class="mono total" id="totalCount">–</span>
       </div>
     </section>
 
-    <section class="rail-block">
-      <h2 class="eyebrow">Confidence threshold</h2>
+    <section class="card rail-block">
+      <div class="card-head"><span class="eyebrow">Confidence threshold</span></div>
       <div class="threshold">
         <input type="range" id="confSlider" min="0.05" max="0.9" step="0.01" value="0.25"
                aria-label="Detection confidence threshold">
-        <output class="mono" id="confValue" for="confSlider">0.25</output>
+        <output class="mono conf-val" id="confValue" for="confSlider">0.25</output>
       </div>
-      <p class="hint">Detections below this confidence are hidden. Adjusts instantly — no re-analysis.</p>
+      <p class="hint">Hides detections below this score. Refilters instantly — no re-analysis.</p>
     </section>
 
-    <section class="rail-block">
-      <h2 class="eyebrow">Export</h2>
+    <section class="card rail-block">
+      <div class="card-head"><span class="eyebrow">Export</span></div>
       <div class="export-grid">
         <button class="btn" id="exportPng" disabled>Annotated image</button>
-        <button class="btn" id="exportCsv" disabled>CSV table</button>
-        <button class="btn" id="exportJson" disabled>JSON data</button>
+        <div class="export-row">
+          <button class="btn ghost" id="exportCsv" disabled>CSV</button>
+          <button class="btn ghost" id="exportJson" disabled>JSON</button>
+        </div>
       </div>
     </section>
 
-    <section class="rail-block about">
-      <h2 class="eyebrow">Instrument</h2>
+    <section class="card rail-block specs-block">
+      <div class="card-head"><span class="eyebrow">Instrument</span></div>
       <dl class="specs mono">
-        <div><dt>Model</dt><dd>YOLO26-s · custom-trained</dd></div>
-        <div><dt>Classes</dt><dd>fiber · film · fragment · pellet</dd></div>
+        <div><dt>Engine</dt><dd>YOLO26-s · custom</dd></div>
         <div><dt>Test mAP@50</dt><dd>0.897</dd></div>
-        <div><dt>Training set</dt><dd>8,948 micrographs · 58k boxes</dd></div>
+        <div><dt>Training data</dt><dd>8,948 micrographs</dd></div>
       </dl>
     </section>
 
@@ -143,8 +179,8 @@
 </main>
 
 <footer class="colophon">
-  <span>PlastiScope — research &amp; educational use</span>
-  <span class="mono">YOLO26 · ONNX Runtime · FastAPI</span>
+  <span>PlastiScope · research &amp; educational use</span>
+  <span class="mono muted">YOLO26 · ONNX Runtime · FastAPI</span>
 </footer>
 
 <div class="toast mono" id="toast" role="status" aria-live="polite" hidden></div>

@@ -2,10 +2,10 @@
 "use strict";
 
 const CLASS_COLORS = {
-  fiber:    "#FFB224",
-  film:     "#46B4E8",
-  fragment: "#C77DFF",
-  pellet:   "#52D273",
+  fiber:    "#E1A73E",
+  film:     "#4FA3D1",
+  fragment: "#A97CD1",
+  pellet:   "#46B08A",
 };
 const CLASSES = Object.keys(CLASS_COLORS);
 
@@ -27,18 +27,20 @@ const state = {
   busy: false,
 };
 
-/* ── Eyepiece tick marks (stage micrometer) ────────────────────────────── */
+/* ── Eyepiece tick marks (stage micrometer, viewBox 240, center 120) ────── */
 (() => {
-  const g = document.querySelector(".ticks");
-  for (let i = 0; i < 60; i++) {
-    const a = (i / 60) * Math.PI * 2;
-    const major = i % 5 === 0;
-    const r1 = major ? 88 : 91, r2 = 96;
+  const g = document.getElementById("ticks");
+  if (!g) return;
+  const C = 120;
+  for (let i = 0; i < 72; i++) {
+    const a = (i / 72) * Math.PI * 2;
+    const major = i % 6 === 0;
+    const r1 = major ? 100 : 104, r2 = 110;
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", 100 + r1 * Math.cos(a));
-    line.setAttribute("y1", 100 + r1 * Math.sin(a));
-    line.setAttribute("x2", 100 + r2 * Math.cos(a));
-    line.setAttribute("y2", 100 + r2 * Math.sin(a));
+    line.setAttribute("x1", C + r1 * Math.cos(a));
+    line.setAttribute("y1", C + r1 * Math.sin(a));
+    line.setAttribute("x2", C + r2 * Math.cos(a));
+    line.setAttribute("y2", C + r2 * Math.sin(a));
     g.appendChild(line);
   }
 })();
