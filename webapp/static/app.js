@@ -2,10 +2,10 @@
 "use strict";
 
 const CLASS_COLORS = {
-  fiber:    "#E1A73E",
-  film:     "#4FA3D1",
-  fragment: "#A97CD1",
-  pellet:   "#46B08A",
+  fiber:    "#D07A4A",
+  film:     "#45C2D0",
+  fragment: "#B583D6",
+  pellet:   "#A7B24E",
 };
 const CLASSES = Object.keys(CLASS_COLORS);
 
