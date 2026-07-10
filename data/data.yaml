@@ -1,0 +1,24 @@
+# ============================================================
+#  Microplastic Detection — Unified Dataset for YOLO26
+#  Built by merging 4 open-source Roboflow datasets.
+#  Morphological taxonomy (GESAMP/Free et al. standard).
+#  Generated: 2026-07-09
+# ============================================================
+
+# Root path of the dataset. Ultralytics resolves train/val/test relative to this.
+path: C:/Users/revon/Desktop/microplastic_YOLO26_final
+
+train: train/images
+val: valid/images
+test: test/images
+
+# Number of classes
+nc: 4
+
+# Class names (index -> name). Index 3 'pellet' consolidates the
+# rounded/spherical morphology (source 'pellet' + source 'microbeads').
+names:
+  0: fiber
+  1: film
+  2: fragment
+  3: pellet

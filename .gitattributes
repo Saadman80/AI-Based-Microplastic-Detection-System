@@ -1,0 +1,9 @@
+# Normalize text line endings across platforms
+* text=auto
+
+# Treat model weights and images as binary (no EOL conversion / diffing)
+*.pt   binary
+*.onnx binary
+*.png  binary
+*.jpg  binary
+*.zip  binary

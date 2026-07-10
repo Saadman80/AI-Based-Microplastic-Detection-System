@@ -1,0 +1,16 @@
+# Core inference / training
+ultralytics>=8.4.90        # YOLO26 support
+torch>=2.2                 # install a build matching your GPU (see docs/KAGGLE_TRAINING_GUIDE.md)
+torchvision>=0.17
+
+# Model export / portable inference
+onnxruntime>=1.18
+onnx>=1.16
+
+# Image / data utilities
+opencv-python>=4.9
+pillow>=10.0
+numpy>=1.26
+pyyaml>=6.0
+pandas>=2.0
+matplotlib>=3.8

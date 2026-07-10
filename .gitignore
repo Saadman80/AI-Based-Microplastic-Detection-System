@@ -1,0 +1,30 @@
+# ─── Large data & archives (hosted on Kaggle/Roboflow, NOT GitHub) ───────────
+# Full image dataset (~9k images, ~330 MB) and all zip archives exceed GitHub
+# limits. The dataset build is fully documented in docs/DATASET_REPORT.md and
+# reproducible; class map lives in data/data.yaml.
+microplastic_YOLO26_final/
+*.zip
+
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+.env
+
+# ─── YOLO / training artifacts ───────────────────────────────────────────────
+runs/
+*.cache
+wandb/
+# Keep only the curated weights in models/ ; ignore stray large checkpoints
+last.pt
+epoch*.pt
+
+# ─── OS / editor ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
