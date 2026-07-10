@@ -112,12 +112,28 @@ Config (YOLO26-s, 640 px, batch 16, AMP, early stopping) is in one editable cell
 
 ---
 
+## 🖥️ Web app — PlastiScope
+
+An instrument-style web interface for the model lives in [`webapp/`](webapp/): drag a micrograph onto the microscope "stage" (or paste from clipboard, or load a bundled sample specimen) and get annotated detections, per-class particle counts, a **live confidence-threshold slider** (re-filters instantly, no re-analysis), per-class visibility toggles, and one-click export of the annotated image, CSV table, or JSON.
+
+The backend is deliberately lean: **FastAPI + ONNX Runtime** — no PyTorch required. Because YOLO26 is NMS-free, the server just letterboxes the image, runs the graph, and rescales the already-decoded boxes (~100 ms/image on CPU).
+
+```bash
+pip install -r requirements.txt
+cd webapp
+uvicorn server:app --host 127.0.0.1 --port 8000
+# open http://127.0.0.1:8000
+```
+
+API: `POST /api/detect` (multipart image → JSON detections), `GET /api/health`, interactive docs at `/api/docs`.
+
 ## 🧭 Roadmap
 - [x] Dataset sourcing, cleaning, unification & audit
 - [x] YOLO26 training on Kaggle GPU + evaluation
 - [x] Model export (PyTorch + ONNX)
-- [ ] **Detection website** (upload an image → annotated detections + particle counts)
+- [x] **Detection website** (upload an image → annotated detections + particle counts)
 - [ ] Optional accuracy pass (higher-resolution `yolo26m @ 896` to strengthen the `pellet` class)
+- [ ] Public deployment
 
 ---
 
