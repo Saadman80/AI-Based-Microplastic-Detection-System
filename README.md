@@ -38,17 +38,18 @@ Deep-learning system that **detects and classifies microplastic particles** in m
 
 ## 🗂️ Dataset
 
-A unified dataset of **8,948 images / 58,026 labeled boxes** was assembled from **four** open microplastic datasets on Roboflow Universe, spanning **two imaging modalities** (brightfield + fluorescence microscopy).
+A unified dataset of **9,238 images / ~58,950 labeled boxes** assembled from **four** open microplastic datasets on Roboflow Universe **plus an originally-labeled in-house lab set** (290 brightfield micrographs), spanning **two imaging modalities** (brightfield + fluorescence microscopy).
 
-| Split | Images | Boxes |
-|-------|:------:|:-----:|
-| train | 7,292 | 46,732 |
-| valid | 1,103 | 7,545 |
-| test  | 553 | 3,749 |
+| Split | Images | of which lab |
+|-------|:------:|:------------:|
+| train | 7,524 | 232 |
+| valid | 1,132 | 29 |
+| test  | 582 | 29 |
 
 Key data-engineering decisions (full write-up in [`docs/DATASET_REPORT.md`](docs/DATASET_REPORT.md)):
 - **Unified 4-class morphological taxonomy** (GESAMP standard). All sources already shared indices 0–2 (fiber/film/fragment); index 3 was harmonized (`pallet`→`pellet`, and `microbeads` folded into the rounded `pellet` class) — achieving a merge with **zero label-file remapping**.
-- **Deduplication + split-leak removal** (7 exact duplicates via MD5, train-priority keep).
+- **In-house lab data** (v1) added with an 80/10/10 split and `lab_` filename prefix (so lab-domain performance can be measured separately); class order matched the canonical taxonomy exactly.
+- **Deduplication + split-leak removal** (MD5; incl. lab-vs-open cross-check — 0 leaks).
 - **Integrity audited**: 0 corrupt images, 0 orphans, 0 out-of-range boxes.
 
 > The raw images are **not** committed (licensing + size). `data/data.yaml` holds the class map; the report documents exact provenance and how to rebuild.
@@ -132,7 +133,8 @@ API: `POST /api/detect` (multipart image → JSON detections), `GET /api/health`
 - [x] YOLO26 training on Kaggle GPU + evaluation
 - [x] Model export (PyTorch + ONNX)
 - [x] **Detection website** (upload an image → annotated detections + particle counts)
-- [ ] Optional accuracy pass (higher-resolution `yolo26m @ 896` to strengthen the `pellet` class)
+- [x] In-house lab dataset labeled & merged (v2)
+- [ ] **v2 retrain** — `yolo26m` + strengthened augmentation on the lab-augmented dataset
 - [ ] Public deployment
 
 ---
@@ -142,4 +144,4 @@ Trained on open datasets shared by the community on **Roboflow Universe** (micro
 
 ---
 
-<p align="center"><em>Author: Sadman Maher · Computer Vision / Deep Learning portfolio project</em></p>
+<p align="center"><em>Author: Kh Sadman  · Computer Vision / Deep Learning portfolio project</em></p>
