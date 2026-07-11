@@ -5,6 +5,9 @@
 microplastic_yolo26_training_dataset/
 *.zip
 
+# Raw model-package folders downloaded from Kaggle (curated copies live in models/ & results/)
+microplastic_model_package*/
+
 # ─── Python ──────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]

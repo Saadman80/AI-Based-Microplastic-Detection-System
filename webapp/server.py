@@ -24,7 +24,7 @@ from PIL import Image, ImageOps
 # ─── Configuration ────────────────────────────────────────────────────────────
 
 ROOT = Path(__file__).resolve().parent
-MODEL_PATH = ROOT.parent / "models" / "microplastic_yolo26.onnx"
+MODEL_PATH = ROOT.parent / "models" / "microplastic_yolo26m.onnx"
 STATIC_DIR = ROOT / "static"
 
 IMG_SIZE = 640              # model input side
