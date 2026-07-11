@@ -1,56 +1,51 @@
-# 🚀 Deploy PlastiScope free on Hugging Face Spaces
+# 🚀 Deploy PlastiScope free on Hugging Face Spaces (Gradio)
 
-This publishes the web app at `https://huggingface.co/spaces/<your-username>/plastiscope`.
-The Space **clones this GitHub repo** (app + model) and runs it — so you only add **2 small files**.
+Publishes the demo at `https://huggingface.co/spaces/<your-username>/plastiscope` — **free**.
 
-> **Prerequisite:** this GitHub repo must be **public** (it is, for a portfolio) so the Space can clone it.
+> **Why Gradio, not Docker?** Hugging Face now puts the **Docker** SDK behind a *paid*
+> plan. The **Gradio** SDK is free (CPU basic) and perfect for serving an ONNX model.
+> The app runs server-side (~0.3 s/image); the model is fetched from this GitHub repo
+> at startup, so the Space needs only **2 small files**.
 
 ---
 
 ## Step 1 — Hugging Face account (once)
-Sign up (free, no card) at <https://huggingface.co/join> if you don't have one.
+Sign up (free, no card) at <https://huggingface.co/join>.
 
 ## Step 2 — Create the Space
 1. Go to <https://huggingface.co/new-space>.
-2. **Owner:** you · **Space name:** `plastiscope`.
-3. **License:** MIT.
-4. **Select the Space SDK:** **Docker** → **Blank**.
-5. **Hardware:** **CPU basic** (free) · **Visibility:** Public.
-6. Click **Create Space**.
+2. **Space name:** `plastiscope` · **License:** MIT.
+3. **Select the Space SDK → Gradio → Blank.**
+4. **Hardware:** **CPU basic** (free) · **Visibility:** Public → **Create Space**.
 
 ## Step 3 — Add the two files (web UI, no coding)
-On your new Space page → **Files** tab → **+ Add file → Create a new file**.
+On the Space → **Files** tab → **+ Add file → Create a new file**:
 
-**File 1 — `Dockerfile`** — paste the contents of [`deploy/hf-space/Dockerfile`](../deploy/hf-space/Dockerfile), then **Commit**.
+**File 1 — `app.py`** — paste the contents of [`deploy/hf-gradio/app.py`](../deploy/hf-gradio/app.py) → **Commit**.
 
-**File 2 — `README.md`** — the Space already has a README; open it → **Edit** → replace everything with the contents of [`deploy/hf-space/README.md`](../deploy/hf-space/README.md) → **Commit**. *(The `---` frontmatter at the top is required — it tells HF to use Docker on port 7860.)*
+**File 2 — `requirements.txt`** — paste [`deploy/hf-gradio/requirements.txt`](../deploy/hf-gradio/requirements.txt) → **Commit**.
+
+*(The Space's README already has the right settings if you created it as Gradio. To be safe, you can also replace the README with [`deploy/hf-gradio/README.md`](../deploy/hf-gradio/README.md) — its `---` frontmatter pins `sdk: gradio`, `app_file: app.py`.)*
 
 ## Step 4 — Wait for the build
-The Space auto-builds (**Building…** badge). It clones the repo, installs the deps, and starts the server — about **2–4 minutes**. Watch **Logs** if you want. When it flips to **Running**, PlastiScope is live. 🎉
+The Space installs the deps, downloads the model from GitHub, and launches Gradio —
+about **2–4 minutes** (**Building… → Running**). Then it's live. 🎉
 
 Your public URL: `https://huggingface.co/spaces/<your-username>/plastiscope`
 
 ---
 
-## Alternative — deploy via git (instead of Step 3)
-If you prefer the terminal:
+## Alternative — deploy via git
 ```bash
 git clone https://huggingface.co/spaces/<your-username>/plastiscope
 cd plastiscope
-cp ../AI-Based-Microplastic-Detection-System/deploy/hf-space/Dockerfile .
-cp ../AI-Based-Microplastic-Detection-System/deploy/hf-space/README.md .
-git add . && git commit -m "PlastiScope on HF Spaces"
+cp ../AI-Based-Microplastic-Detection-System/deploy/hf-gradio/* .
+git add . && git commit -m "PlastiScope (Gradio)"
 git push        # enter your HF username + an access token (Settings → Access Tokens)
 ```
 
----
-
-## Updating the demo later
-The Space is pinned to whatever the GitHub repo had at build time. After you push new
-changes to GitHub, rebuild the Space: Space → **Settings → Factory reboot** (re-clones
-the latest code/model).
-
 ## Notes
-- **First load after inactivity:** free Spaces pause when idle and wake in a few seconds on the next visit.
-- **RAM:** free CPU tier is 2 vCPU / 16 GB — plenty for the 78 MB model.
-- **Keep the GitHub repo public** for the Space to clone. (If you make it private, switch to uploading the app files + model into the Space directly instead.)
+- **First load after idle:** free Spaces pause when idle and wake in a few seconds.
+- **Model:** `microplastic_yolo26m.onnx` is fetched from the public GitHub repo at startup — keep the repo **public**.
+- **Updating:** after pushing changes to GitHub, restart the Space (**Settings → Factory reboot**) to re-fetch.
+- A **Docker** version (identical FastAPI app, if you ever get a paid plan) is kept in [`deploy/hf-space/`](../deploy/hf-space/).
