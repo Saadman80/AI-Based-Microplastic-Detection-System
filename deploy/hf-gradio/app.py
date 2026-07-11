@@ -20,6 +20,24 @@ except Exception:  # running locally / non-ZeroGPU → no-op decorator
     def GPU(func=None, **kwargs):
         return func if func else (lambda f: f)
 
+# ── Work around a known gradio 4.44 / gradio_client bug ───────────────────────
+# A boolean `additionalProperties` in the auto-generated API schema crashes
+# get_api_info() with "argument of type 'bool' is not iterable", which then fails
+# the launch health-check. Make the schema parser tolerate boolean schemas.
+try:
+    import gradio_client.utils as _gc_utils
+
+    _gc_orig = _gc_utils._json_schema_to_python_type
+
+    def _gc_safe(schema, defs=None):
+        if isinstance(schema, bool):
+            return "Any"
+        return _gc_orig(schema, defs)
+
+    _gc_utils._json_schema_to_python_type = _gc_safe
+except Exception:
+    pass
+
 # ── Config ──────────────────────────────────────────────────────────────────
 REPO = "https://raw.githubusercontent.com/Saadman80/AI-Based-Microplastic-Detection-System/main"
 MODEL_URL = f"{REPO}/models/microplastic_yolo26m.onnx"
