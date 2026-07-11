@@ -13,6 +13,13 @@ import requests
 import gradio as gr
 from PIL import Image, ImageDraw, ImageFont
 
+try:
+    import spaces  # provided on HF ZeroGPU Spaces
+    GPU = spaces.GPU
+except Exception:  # running locally / non-ZeroGPU → no-op decorator
+    def GPU(func=None, **kwargs):
+        return func if func else (lambda f: f)
+
 # ── Config ──────────────────────────────────────────────────────────────────
 REPO = "https://raw.githubusercontent.com/Saadman80/AI-Based-Microplastic-Detection-System/main"
 MODEL_URL = f"{REPO}/models/microplastic_yolo26m.onnx"
@@ -72,8 +79,9 @@ def letterbox(img, size=IMG_SIZE):
     return np.ascontiguousarray(arr.transpose(2, 0, 1)[None]), s, px, py
 
 
+@GPU
 def detect(image, conf=0.25):
-    """image: RGB numpy array from Gradio. Returns (annotated PIL image, counts dict)."""
+    """image: RGB numpy array from Gradio. Returns (annotated PIL image, summary string)."""
     if image is None:
         return None, "Upload a micrograph (or pick a sample) to begin."
 
