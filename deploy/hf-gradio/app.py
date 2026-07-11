@@ -75,7 +75,7 @@ def letterbox(img, size=IMG_SIZE):
 def detect(image, conf=0.25):
     """image: RGB numpy array from Gradio. Returns (annotated PIL image, counts dict)."""
     if image is None:
-        return None, {"info": "Upload a micrograph to begin."}
+        return None, "Upload a micrograph (or pick a sample) to begin."
 
     img = Image.fromarray(image).convert("RGB")
     w0, h0 = img.size
@@ -111,9 +111,12 @@ def detect(image, conf=0.25):
         draw.text((bx1 + 3, ly + 2), label, fill=(255, 255, 255), font=font)
         counts[name] += 1
 
-    result = {k: counts[k] for k in CLASS_NAMES}
-    result["TOTAL"] = sum(counts.values())
-    return img, result
+    total = sum(counts.values())
+    plural = "s" if total != 1 else ""
+    summary = f"### {total} particle{plural} detected\n\n" + "  ·  ".join(
+        f"**{c}**  {counts[c]}" for c in CLASS_NAMES
+    )
+    return img, summary
 
 
 # ── UI ──────────────────────────────────────────────────────────────────────
@@ -133,7 +136,7 @@ with gr.Blocks(title="PlastiScope — Microplastic Detection", theme=gr.themes.S
             btn = gr.Button("Detect", variant="primary")
         with gr.Column():
             out_img = gr.Image(label="Detections")
-            out_counts = gr.JSON(label="Particle counts")
+            out_counts = gr.Markdown("Upload a micrograph (or pick a sample) to begin.")
     if EXAMPLES:
         gr.Examples(examples=EXAMPLES, inputs=[inp, conf], label="Sample specimens")
     gr.Markdown(
