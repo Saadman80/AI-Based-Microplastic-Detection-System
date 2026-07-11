@@ -7,6 +7,7 @@ Deep-learning system that **detects and classifies microplastic particles** in m
 ![mAP50](https://img.shields.io/badge/test%20mAP@50-0.895-2ea043)
 ![Backend](https://img.shields.io/badge/serving-FastAPI%20%2B%20ONNX%20Runtime-orange)
 ![License](https://img.shields.io/badge/code-MIT-lightgrey)
+[![Dataset](https://img.shields.io/badge/dataset-Kaggle-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/sadmanmahir/microplastic-yolo26-training-dataset)
 
 Built end-to-end: **sourcing & cleaning datasets → labeling in-house lab data → harmonizing labels → training on Kaggle GPUs → evaluation → ONNX export → a full detection web app.**
 
@@ -56,7 +57,9 @@ Key data-engineering decisions:
 - **Deduplication + split-leak removal** (MD5, incl. lab-vs-community cross-check — 0 leaks).
 - **Integrity audited**: 0 corrupt images, 0 orphans, 0 out-of-range boxes.
 
-> The raw images are not committed (size). `data/data.yaml` holds the class map; the report documents provenance and how to rebuild.
+> **📦 Full dataset:** [**Kaggle → sadmanmahir/microplastic-yolo26-training-dataset**](https://www.kaggle.com/datasets/sadmanmahir/microplastic-yolo26-training-dataset)
+>
+> The raw images are not committed to this repo (size). `data/data.yaml` holds the class map, and [`docs/DATASET_REPORT.md`](docs/DATASET_REPORT.md) documents full provenance.
 
 ---
 
