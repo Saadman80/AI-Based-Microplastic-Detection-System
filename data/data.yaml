@@ -1,12 +1,13 @@
 # ============================================================
-#  Microplastic Detection — Unified Dataset for YOLO26
-#  Built by merging 4 open-source Roboflow datasets.
-#  Morphological taxonomy (GESAMP/Free et al. standard).
-#  Generated: 2026-07-09
+#  Microplastic Detection — YOLO26 Training Dataset
+#  In-house MINA Lab (Univ. of Dhaka) set + 4 community datasets.
+#  Morphological taxonomy (GESAMP / Free et al. standard).
+#  Updated: 2026-07-11
 # ============================================================
 
-# Root path of the dataset. Ultralytics resolves train/val/test relative to this.
-path: C:/Users/revon/Desktop/microplastic_YOLO26_final
+# Root path. On Kaggle the training notebook auto-detects the mounted path and
+# regenerates this file, so this local value is only used for local runs.
+path: C:/Users/revon/Desktop/microplastic_detection_system/microplastic_yolo26_training_dataset
 
 train: train/images
 val: valid/images

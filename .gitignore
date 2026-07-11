@@ -2,7 +2,7 @@
 # Full image dataset (~9k images, ~330 MB) and all zip archives exceed GitHub
 # limits. The dataset build is fully documented in docs/DATASET_REPORT.md and
 # reproducible; class map lives in data/data.yaml.
-microplastic_YOLO26_final/
+microplastic_yolo26_training_dataset/
 *.zip
 
 # ─── Python ──────────────────────────────────────────────────────────────────

@@ -5,7 +5,7 @@
 **You have two files on your Desktop:**
 | File | What it is | Where it goes |
 |------|-----------|---------------|
-| `microplastic_YOLO26_final.zip` (307 MB) | Your prepared dataset | Upload as a **Kaggle Dataset** |
+| `microplastic_yolo26_training_dataset.zip` (~358 MB) | Your prepared dataset | Upload as a **Kaggle Dataset** |
 | `microplastic_yolo26_kaggle_training.ipynb` | The full training notebook (22 cells) | Import as a **Kaggle Notebook** |
 
 ---
@@ -38,7 +38,7 @@ Pick a **GPU** over the TPU (Ultralytics YOLO runs on PyTorch/CUDA; the TPU need
 
 ### Step A — Upload the dataset (once)
 1. Go to **kaggle.com → Datasets → New Dataset**.
-2. Drag in **`microplastic_YOLO26_final.zip`**. Kaggle auto-extracts it.
+2. Drag in **`microplastic_yolo26_training_dataset.zip`**. Kaggle auto-extracts it.
 3. Title it e.g. **`microplastic-yolo26`**. Set visibility (Private is fine). Click **Create**.
 4. Wait for it to finish processing (a few minutes for 307 MB).
 
@@ -138,4 +138,4 @@ Classes (index order): `['fiber', 'film', 'fragment', 'pellet']`.
 
 ---
 
-*Dataset details and merge decisions are documented in `microplastic_YOLO26_final/DATASET_REPORT.md`.*
+*Dataset details and merge decisions are documented in `docs/DATASET_REPORT.md`.*
